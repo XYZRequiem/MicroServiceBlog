@@ -43,6 +43,6 @@ app.post("/events", async (req, res) => {
   res.send({});
 });
 
-app.listen(4000, () => {
+app.listen(PORT, () => {
   console.log(`Listening on port ${PORT}`);
 });
