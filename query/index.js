@@ -11,6 +11,7 @@ app.use(bodyParser.json());
 app.use(cors());
 
 const posts = {};
+const eventBusURL = "http://event-bus-srv:4005/events";
 
 const handleEvent = (type, data) => {
   if (type === "PostCreated") {
@@ -53,7 +54,7 @@ app.post("/events", (req, res) => {
 app.listen(PORT, async () => {
   console.log(`Listening on port ${PORT}`);
 
-  const res = await axios.get("http://event-bus-srv:4005/events");
+  const res = await axios.get(eventBusURL);
 
   res.data.map((event) => {
     console.log("Processing event:", event.type);

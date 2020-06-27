@@ -10,18 +10,22 @@ app.use(bodyParser.json());
 
 const events = [];
 
+const serviceURLS = [
+  "http://posts-clusterip-srv:4000/events",
+  "http://comments-srv:4001/events",
+  "http://query-srv:4002/events",
+  "http://moderation-srv:4003/events",
+];
+
 app.post("/events", async (req, res) => {
   console.log("Event Received:", req.body.type);
   const event = req.body;
 
   events.push(event);
+  serviceURLS.forEach((serviceURL) => {
+    axios.post(serviceURL, event);
+  });
 
-  axios.post("http://posts-clusterip-srv:4000/events", event);
-  axios.post("http://comments-srv:4001/events", event);
-  axios.post("http://query-srv:4002/events", event);
-  axios.post("http://moderation-srv:4003/events", event);
-
-  console.log(event);
   res.send({ status: "OK" });
 });
 

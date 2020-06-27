@@ -7,6 +7,8 @@ const PORT = 4003;
 const app = express();
 app.use(bodyParser.json());
 
+const eventBusURL = "http://event-bus-srv:4005/events";
+
 app.post("/events", async (req, res) => {
   console.log("Event Received:", req.body.type);
   const { type, data } = req.body;
@@ -16,7 +18,7 @@ app.post("/events", async (req, res) => {
 
     const comment = { ...data, status };
 
-    await axios.post("http://event-bus-srv:4005/events", {
+    await axios.post(eventBusURL, {
       type: "CommentModerated",
       data: comment,
     });

@@ -14,6 +14,7 @@ app.use(cors());
 
 // temp data store
 const posts = {};
+const eventBusURL = "http://event-bus-srv:4005/events";
 
 // Post Endpoints
 app.get("/posts", (req, res) => {
@@ -28,7 +29,7 @@ app.post("/posts/create", async (req, res) => {
   const post = { id, title };
   posts[id] = post;
 
-  await axios.post("http://event-bus-srv:4005/events", {
+  await axios.post(eventBusURL, {
     type: "PostCreated",
     data: post,
   });
@@ -44,6 +45,5 @@ app.post("/events", async (req, res) => {
 });
 
 app.listen(PORT, () => {
-  console.log("v3");
   console.log(`Listening on port ${PORT}`);
 });

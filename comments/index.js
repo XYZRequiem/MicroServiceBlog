@@ -14,6 +14,7 @@ app.use(cors());
 
 // temp data store
 const commentsByPostId = {};
+const eventBusURL = "http://event-bus-srv:4005/events";
 
 // Comment Endpoints
 app.get("/posts/:id/comments", (req, res) => {
@@ -30,7 +31,7 @@ app.post("/posts/:id/comments", async (req, res) => {
   comments.push(comment);
   commentsByPostId[postId] = comments;
 
-  await axios.post("http://event-bus-srv:4005/events", {
+  await axios.post(eventBusURL, {
     type: "CommentCreated",
     data: comment,
   });
@@ -52,7 +53,7 @@ app.post("/events", async (req, res) => {
     });
     comment.status = status;
 
-    axios.post("http://event-bus-srv:4005/events", {
+    axios.post(eventBusURL, {
       type: "CommentUpdated",
       data: comment,
     });
